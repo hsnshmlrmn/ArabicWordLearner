@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arabic Flashcards Quiz - Lesson 1</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; color: #222; display: flex; flex-direction: column; align-items: center; }
+    .quiz-container { background: #fff; padding: 2rem; border-radius: 10px; margin-top: 2rem; box-shadow: 0 4px 12px #0001; min-width: 320px; }
+    .icon { font-size: 2rem; }
+    .input-area { margin: 1.5rem 0; }
+    .result { font-weight: bold; margin: 1rem 0; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; border-radius: 5px; border: none; background: #3c8dbc; color: #fff; cursor: pointer; }
+    button:disabled { background: #bbb; }
+    .score { margin: 1rem 0; font-size: 1.1rem; }
+    .next-btn { margin-left: 1rem; }
+    .arabic-hint { color: #888; font-size: 1.2rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Arabic Flashcards Quiz - Lesson 1</h1>
+  <div class="quiz-container">
+    <div id="question">
+      <div class="icon" id="icon"></div>
+      <div id="english-word" style="font-size:1.5rem; margin-top:0.5rem;"></div>
+    </div>
+    <form id="answer-form" autocomplete="off">
+      <div class="input-area">
+        <input type="text" id="user-answer" placeholder="Type Arabic here..." style="font-size:1.1rem; width: 80%;" autofocus>
+      </div>
+      <button type="submit">Check</button>
+      <button type="button" class="next-btn" id="next-btn" style="display:none;">Next</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div class="arabic-hint" id="arabic-hint"></div>
+    <div class="score" id="score"></div>
+  </div>
+  <script>
+    // Quiz data
+    const quiz = [
+      {english: "House", arabic: "بَيْت", icon: "🏠"},
+      {english: "Pen", arabic: "قَلَم", icon: "🖊️"},
+      {english: "Masjid", arabic: "مَسْجِد", icon: "🕌"},
+      {english: "Key", arabic: "مِفْتَاح", icon: "🗝️"},
+      {english: "Door", arabic: "بَاب", icon: "🚪"},
+      {english: "Desk", arabic: "مَكْتَب", icon: "🪑"},
+      {english: "Book", arabic: "كِتَاب", icon: "📖"},
+      {english: "Bed", arabic: "سَرِير", icon: "🛏️"},
+      {english: "Notebook", arabic: "دَفْتَر", icon: "📓"},
+      {english: "Chair", arabic: "كُرْسِي", icon: "🪑"},
+      {english: "Star", arabic: "نَجْم", icon: "⭐"},
+      {english: "Shirt", arabic: "قَمِيص", icon: "👕"},
+    ];
+
+    // Shuffle quiz order
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    shuffle(quiz);
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      document.getElementById('user-answer').value = "";
+      document.getElementById('result').textContent = "";
+      document.getElementById('arabic-hint').textContent = "";
+      document.getElementById('next-btn').style.display = "none";
+      const q = quiz[current];
+      document.getElementById('icon').textContent = q.icon;
+      document.getElementById('english-word').textContent = q.english;
+      document.getElementById('score').textContent = `Question ${current + 1} of ${quiz.length} | Score: ${score}`;
+      document.getElementById('user-answer').disabled = false;
+    }
+
+    function checkAnswer(e) {
+      e.preventDefault();
+      const userAns = document.getElementById('user-answer').value.trim();
+      const correct = quiz[current].arabic;
+      let resultText = "";
+      if (!userAns) {
+        resultText = "Please enter your answer!";
+      } else if (normalize(userAns) === normalize(correct)) {
+        resultText = "✅ Correct!";
+        score++;
+        document.getElementById('next-btn').style.display = "inline-block";
+      } else {
+        resultText = `❌ Incorrect!`;
+        document.getElementById('arabic-hint').textContent = `Correct: ${correct}`;
+        document.getElementById('next-btn').style.display = "inline-block";
+      }
+      document.getElementById('result').textContent = resultText;
+      document.getElementById('user-answer').disabled = true;
+    }
+
+    function normalize(str) {
+      // Remove spaces, Arabic diacritics, and normalize forms for fair comparison
+      return str.replace(/\s/g, "")
+                .replace(/[\u064B-\u0652]/g, "") // Remove harakat
+                .normalize("NFC");
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        showQuestion();
+      } else {
+        document.getElementById('question').innerHTML = "<div style='font-size:1.2rem'>Quiz Complete!</div>";
+        document.getElementById('answer-form').style.display = "none";
+        document.getElementById('result').textContent = `Your score: ${score} / ${quiz.length}`;
+        document.getElementById('arabic-hint').textContent = "";
+        document.getElementById('score').textContent = "";
+      }
+    }
+
+    document.getElementById('answer-form').onsubmit = checkAnswer;
+    document.getElementById('next-btn').onclick = nextQuestion;
+
+    showQuestion();
+  </script>
+</body>
+</html>
