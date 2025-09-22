@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js');
+            });
+        }
+    </script>
+    
+    <meta charset="UTF-8">
+    <title>Arabic Vocabulary Quiz</title>
+    
+    <style>
+        @media (max-width: 600px) {
+            body { font-size: 16px; padding: 10px; }
+            .options button { width: 100%; font-size: 16px; }
+        }
+    
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 20px; }
+        .options button { display: block; margin: 5px 0; padding: 10px; width: 200px; }
+        #result { font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Arabic Vocabulary Quiz</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+    <script>
+        const questions = [
+            { word: "House", correct: "بيت", options: ["قلم", "مسجد", "بيت", "كتاب"] },
+            { word: "Pen", correct: "قلم", options: ["كرسي", "قلم", "باب", "نجم"] },
+            { word: "Masjid", correct: "مسجد", options: ["مكتب", "مسجد", "دفتر", "قميص"] },
+            { word: "Key", correct: "مفتاح", options: ["مفتاح", "سرير", "بيت", "نجم"] },
+            { word: "Door", correct: "باب", options: ["باب", "كرسي", "قميص", "دفتر"] },
+            { word: "Desk", correct: "مكتب", options: ["مكتب", "كتاب", "بيت", "قلم"] },
+            { word: "Book", correct: "كتاب", options: ["كتاب", "سرير", "نجم", "قميص"] },
+            { word: "Bed", correct: "سرير", options: ["سرير", "دفتر", "كرسي", "مفتاح"] },
+            { word: "Notebook", correct: "دفتر", options: ["دفتر", "قميص", "باب", "بيت"] },
+            { word: "Chair", correct: "كرسي", options: ["كرسي", "قلم", "مكتب", "نجم"] },
+            { word: "Star", correct: "نجم", options: ["نجم", "كتاب", "سرير", "قميص"] },
+            { word: "Shirt", correct: "قميص", options: ["قميص", "دفتر", "باب", "كرسي"] }
+        ];
+
+        let current = 0;
+        let score = 0;
+
+        function showQuestion() {
+            const q = questions[current];
+            const quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = `<div class='question'><strong>${current + 1}. What is the Arabic word for "${q.word}"?</strong></div>`;
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(opt);
+                optionsDiv.appendChild(btn);
+            });
+            quizDiv.appendChild(optionsDiv);
+        }
+
+        function checkAnswer(answer) {
+            const q = questions[current];
+            if (answer === q.correct) {
+                score++;
+                alert("Correct!");
+            } else {
+                alert(`Wrong! The correct answer is ${q.correct}`);
+            }
+            current++;
+            if (current < questions.length) {
+                showQuestion();
+            } else {
+                document.getElementById("quiz").innerHTML = "";
+                document.getElementById("result").textContent = `Quiz completed! Your score: ${score} out of ${questions.length}`;
+            }
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>
