@@ -41,3 +41,4 @@
 
 ---
 Enjoy learning Arabic vocabulary with this simple and effective quiz app!
+
