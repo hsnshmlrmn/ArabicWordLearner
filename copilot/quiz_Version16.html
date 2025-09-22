@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arabic Flashcards Quiz - Lesson 1</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; color: #222; display: flex; flex-direction: column; align-items: center; }
+    .quiz-container { background: #fff; padding: 2rem; border-radius: 10px; margin-top: 2rem; box-shadow: 0 4px 12px #0001; min-width: 320px; }
+    .input-area { margin: 1.5rem 0; }
+    .result { font-weight: bold; margin: 1rem 0; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; border-radius: 5px; border: none; background: #3c8dbc; color: #fff; cursor: pointer; }
+    button:disabled { background: #bbb; }
+    .score { margin: 1rem 0; font-size: 1.1rem; }
+    .next-btn { margin-left: 1rem; }
+    .answer-show { font-size: 1.2rem; margin: 0.8rem 0 0.3rem 0; }
+    .icon { font-size: 1.3em; vertical-align: middle; margin-left: 0.4em; }
+    table.vocab { margin-top: 1em; margin-bottom: 2em; border-collapse: collapse; }
+    table.vocab th, table.vocab td { border: 1px solid #ddd; padding: 0.3em 0.7em; font-size: 1rem; text-align: center; }
+    table.vocab th { background: #f0f0f0; }
+    .menu-btns { display: flex; flex-direction: column; align-items: center; gap: 1em; margin-bottom: 1em; }
+    #menu-container { margin-top: 2em; }
+    .radio-group { margin: 1.2em 0 0.7em 0; font-size: 1.2em; }
+    .radio-label { margin-right: 1em; margin-left: 1em; cursor: pointer; }
+    .rtl { direction: rtl; }
+  </style>
+</head>
+<body>
+  <h1>Arabic Flashcards Quiz - Lesson 1</h1>
+
+  <div class="quiz-container" id="menu-container">
+    <div class="menu-btns">
+      <button id="show-vocab-btn">📘 Vocabulary List</button>
+      <button id="start-quiz-btn">1️⃣ Vocabulary Quiz</button>
+      <button id="start-what-btn">2️⃣ What is this? (مَا هَذَا؟)</button>
+      <button id="start-tf-btn">3️⃣ True/False (نَعَم / لَا)</button>
+    </div>
+  </div>
+
+  <div class="quiz-container" id="vocab-list" style="display:none;">
+    <div class="section-title">🗒️ Vocabulary List</div>
+    <table class="vocab">
+      <tr>
+        <th>Arabic</th>
+        <th>English</th>
+        <th>Transliteration</th>
+        <th>Icon</th>
+      </tr>
+      <tr><td>بَيْت</td><td>house</td><td>bayt</td><td>🏠</td></tr>
+      <tr><td>قَلَم</td><td>pen</td><td>qalam</td><td>🖊️</td></tr>
+      <tr><td>مَسْجِد</td><td>masjid</td><td>masjid</td><td>🕌</td></tr>
+      <tr><td>مِفْتَاح</td><td>key</td><td>miftaah</td><td>🗝️</td></tr>
+      <tr><td>بَاب</td><td>door</td><td>baab</td><td>🚪</td></tr>
+      <tr><td>مَكْتَب</td><td>desk</td><td>maktab</td><td>🪑</td></tr>
+      <tr><td>كِتَاب</td><td>book</td><td>kitaab</td><td>📖</td></tr>
+      <tr><td>سَرِير</td><td>bed</td><td>sareer</td><td>🛏️</td></tr>
+      <tr><td>دَفْتَر</td><td>notebook</td><td>daftar</td><td>📓</td></tr>
+      <tr><td>كُرْسِي</td><td>chair</td><td>kursi</td><td>🪑</td></tr>
+      <tr><td>نَجْم</td><td>star</td><td>najm</td><td>⭐</td></tr>
+      <tr><td>قَمِيص</td><td>shirt</td><td>qamees</td><td>👕</td></tr>
+      <tr><td>مَا</td><td>what</td><td>maa</td><td>❓</td></tr>
+      <tr><td>هَذَا</td><td>this</td><td>haadhaa</td><td>👉</td></tr>
+      <tr><td>وَ</td><td>and</td><td>wa</td><td>➕</td></tr>
+      <tr><td>نَعَم</td><td>yes</td><td>na‘am</td><td>✅</td></tr>
+      <tr><td>لَا</td><td>no</td><td>laa</td><td>❌</td></tr>
+    </table>
+    <button onclick="returnToMenu()">⬅️ Back to Menu</button>
+  </div>
+
+  <div class="quiz-container" id="quiz-section" style="display:none;">
+    <div id="section-title-quiz1" class="section-title">1️⃣ Vocabulary Quiz</div>
+    <div id="question">
+      <div class="answer-show" id="arabic-word"></div>
+    </div>
+    <form id="answer-form" autocomplete="off">
+      <div class="input-area">
+        <input type="text" id="user-answer" placeholder="Type English here..." style="font-size:1.1rem; width: 80%;" autofocus>
+      </div>
+      <button type="submit">Check</button>
+      <button type="button" class="next-btn" id="next-btn" style="display:none;">Next</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div class="answer-show" id="correct-answer"></div>
+    <div class="score" id="score"></div>
+    <button onclick="returnToMenu()">⬅️ Back to Menu</button>
+  </div>
+
+  <div class="quiz-container" id="quiz-section-2" style="display:none;">
+    <div id="section-title-quiz2" class="section-title">2️⃣ What is this? / مَا هَذَا؟ Quiz</div>
+    <div id="question-2">
+      <div class="answer-show" id="what-arabic-question"></div>
+    </div>
+    <form id="answer-form-2" autocomplete="off">
+      <div class="input-area">
+        <input type="text" id="user-answer-2" placeholder="Type English here..." style="font-size:1.1rem; width: 80%;" autofocus>
+      </div>
+      <button type="submit">Check</button>
+      <button type="button" class="next-btn" id="next-btn-2" style="display:none;">Next</button>
+    </form>
+    <div class="result" id="result-2"></div>
+    <div class="answer-show" id="correct-answer-2"></div>
+    <div class="score" id="score-2"></div>
+    <button onclick="returnToMenu()">⬅️ Back to Menu</button>
+  </div>
+
+  <div class="quiz-container" id="quiz-section-3" style="display:none;">
+    <div id="section-title-quiz3" class="section-title">3️⃣ True or False (Yes/No in Arabic)</div>
+    <div id="question-3">
+      <div class="icon" id="tf-icon"></div>
+      <span class="answer-show rtl" id="tf-arabic-sentence"></span>
+    </div>
+    <form id="answer-form-3" autocomplete="off">
+      <div class="radio-group rtl">
+        <label class="radio-label"><input type="radio" name="tfChoice" value="نَعَم"> نَعَم</label>
+        <label class="radio-label"><input type="radio" name="tfChoice" value="لَا"> لَا</label>
+      </div>
+      <button type="submit">Check</button>
+      <button type="button" class="next-btn" id="next-btn-3" style="display:none;">Next</button>
+    </form>
+    <div class="result" id="result-3"></div>
+    <div class="answer-show" id="correct-answer-3"></div>
+    <div class="score" id="score-3"></div>
+    <button onclick="returnToMenu()">⬅️ Back to Menu</button>
+  </div>
+
+  <script>
+    // Vocabulary Data
+    const vocab = [
+      {arabic: "بَيْت", english: "house", icon: "🏠"},
+      {arabic: "قَلَم", english: "pen", icon: "🖊️"},
+      {arabic: "مَسْجِد", english: "masjid", icon: "🕌"},
+      {arabic: "مِفْتَاح", english: "key", icon: "🗝️"},
+      {arabic: "بَاب", english: "door", icon: "🚪"},
+      {arabic: "مَكْتَب", english: "desk", icon: "🪑"},
+      {arabic: "كِتَاب", english: "book", icon: "📖"},
+      {arabic: "سَرِير", english: "bed", icon: "🛏️"},
+      {arabic: "دَفْتَر", english: "notebook", icon: "📓"},
+      {arabic: "كُرْسِي", english: "chair", icon: "🪑"},
+      {arabic: "نَجْم", english: "star", icon: "⭐"},
+      {arabic: "قَمِيص", english: "shirt", icon: "👕"},
+      {arabic: "مَا", english: "what", icon: "❓"},
+      {arabic: "هَذَا", english: "this", icon: "👉"},
+      {arabic: "وَ", english: "and", icon: "➕"},
+      {arabic: "نَعَم", english: "yes", icon: "✅"},
+      {arabic: "لَا", english: "no", icon: "❌"}
+    ];
+
+    // Quiz 1: Vocab quiz (all)
+    const quiz = [...vocab];
+
+    // Quiz 2: "What is this?" for first 12 vocab
+    const whatQuiz = vocab.slice(0, 12).map(item => ({
+      arabic: `مَا هَذَا؟ (${item.arabic})`,
+      english: item.english,
+      icon: item.icon,
+    }));
+
+    // Quiz 3: True/False questions (Arabic sentences, yes/no as answer)
+    const tfStatements = [
+      // True statements
+      {sentence: "هَذَا بَيْت.", correct: "نَعَم", icon: "🏠"},
+      {sentence: "هَذَا قَلَم.", correct: "نَعَم", icon: "🖊️"},
+      {sentence: "هَذَا مَسْجِد.", correct: "نَعَم", icon: "🕌"},
+      {sentence: "هَذَا مِفْتَاح.", correct: "نَعَم", icon: "🗝️"},
+      {sentence: "هَذَا بَاب.", correct: "نَعَم", icon: "🚪"},
+      {sentence: "هَذَا مَكْتَب.", correct: "نَعَم", icon: "🪑"},
+      // False statements (wrong vocab with icon)
+      {sentence: "هَذَا قَلَم.", correct: "لَا", icon: "🏠"},
+      {sentence: "هَذَا كِتَاب.", correct: "لَا", icon: "🛏️"},
+      {sentence: "هَذَا بَيْت.", correct: "لَا", icon: "🖊️"},
+      {sentence: "هَذَا دَفْتَر.", correct: "لَا", icon: "⭐"},
+      {sentence: "هَذَا كُرْسِي.", correct: "لَا", icon: "📖"},
+      {sentence: "هَذَا قَمِيص.", correct: "لَا", icon: "🪑"}
+    ];
+
+    // Shuffle function
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    shuffle(quiz);
+    shuffle(whatQuiz);
+    shuffle(tfStatements);
+
+    // Quiz 1 logic
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      document.getElementById('user-answer').value = "";
+      document.getElementById('result').textContent = "";
+      document.getElementById('correct-answer').textContent = "";
+      document.getElementById('next-btn').style.display = "none";
+      const q = quiz[current];
+      document.getElementById('arabic-word').textContent = q.arabic;
+      document.getElementById('score').textContent = `Question ${current + 1} of ${quiz.length} | Score: ${score}`;
+      document.getElementById('user-answer').disabled = false;
+      document.getElementById('user-answer').focus();
+    }
+
+    function checkAnswer(e) {
+      e.preventDefault();
+      const userAns = document.getElementById('user-answer').value.trim().toLowerCase();
+      const q = quiz[current];
+      const correct = q.english.toLowerCase();
+      let resultText = "";
+      if (!userAns) {
+        resultText = "Please enter your answer!";
+        document.getElementById('result').textContent = resultText;
+        return;
+      } else if (userAns === correct) {
+        resultText = "✅ Correct!";
+        score++;
+      } else {
+        resultText = `❌ Incorrect!`;
+      }
+      document.getElementById('result').textContent = resultText;
+      document.getElementById('correct-answer').innerHTML = `Answer: ${q.english} <span class="icon">${q.icon}</span>`;
+      document.getElementById('next-btn').style.display = "inline-block";
+      document.getElementById('user-answer').disabled = true;
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        showQuestion();
+      } else {
+        document.getElementById('quiz-section').style.display = "none";
+        document.getElementById('menu-container').style.display = '';
+      }
+    }
+
+    document.getElementById('answer-form').onsubmit = checkAnswer;
+    document.getElementById('next-btn').onclick = nextQuestion;
+
+    // Quiz 2 logic ("What is this?")
+    let current2 = 0;
+    let score2 = 0;
+    function showWhatQuestion() {
+      document.getElementById('user-answer-2').value = "";
+      document.getElementById('result-2').textContent = "";
+      document.getElementById('correct-answer-2').textContent = "";
+      document.getElementById('next-btn-2').style.display = "none";
+      const q = whatQuiz[current2];
+      document.getElementById('what-arabic-question').textContent = q.arabic;
+      document.getElementById('score-2').textContent = `Question ${current2 + 1} of ${whatQuiz.length} | Score: ${score2}`;
+      document.getElementById('user-answer-2').disabled = false;
+      document.getElementById('user-answer-2').focus();
+    }
+
+    function checkAnswer2(e) {
+      e.preventDefault();
+      const userAns = document.getElementById('user-answer-2').value.trim().toLowerCase();
+      const q = whatQuiz[current2];
+      const correct = q.english.toLowerCase();
+      let resultText = "";
+      if (!userAns) {
+        resultText = "Please enter your answer!";
+        document.getElementById('result-2').textContent = resultText;
+        return;
+      } else if (userAns === correct) {
+        resultText = "✅ Correct!";
+        score2++;
+      } else {
+        resultText = `❌ Incorrect!`;
+      }
+      document.getElementById('result-2').textContent = resultText;
+      document.getElementById('correct-answer-2').innerHTML = `Answer: ${q.english} <span class="icon">${q.icon}</span>`;
+      document.getElementById('next-btn-2').style.display = "inline-block";
+      document.getElementById('user-answer-2').disabled = true;
+    }
+
+    function nextQuestion2() {
+      current2++;
+      if (current2 < whatQuiz.length) {
+        showWhatQuestion();
+      } else {
+        document.getElementById('quiz-section-2').style.display = "none";
+        document.getElementById('menu-container').style.display = '';
+      }
+    }
+
+    document.getElementById('answer-form-2').onsubmit = checkAnswer2;
+    document.getElementById('next-btn-2').onclick = nextQuestion2;
+
+    // Quiz 3 logic (True/False)
+    let current3 = 0;
+    let score3 = 0;
+
+    function showTFQuestion() {
+      // Reset radio buttons
+      document.querySelectorAll('input[name="tfChoice"]').forEach(el => { el.checked = false; el.disabled = false; });
+      document.getElementById('result-3').textContent = "";
+      document.getElementById('correct-answer-3').textContent = "";
+      document.getElementById('next-btn-3').style.display = "none";
+      const q = tfStatements[current3];
+      document.getElementById('tf-arabic-sentence').textContent = q.sentence;
+      document.getElementById('tf-icon').textContent = q.icon;
+      document.getElementById('score-3').textContent = `Question ${current3 + 1} of ${tfStatements.length} | Score: ${score3}`;
+    }
+
+    function checkTFAnswer(e) {
+      e.preventDefault();
+      const selected = document.querySelector('input[name="tfChoice"]:checked');
+      const q = tfStatements[current3];
+      const correct = q.correct;
+      let resultText = "";
+      if (!selected) {
+        resultText = "Please select an answer!";
+        document.getElementById('result-3').textContent = resultText;
+        return;
+      }
+      if (selected.value === correct) {
+        resultText = "✅ Correct!";
+        score3++;
+      } else {
+        resultText = `❌ Incorrect!`;
+      }
+      document.getElementById('result-3').textContent = resultText;
+      document.getElementById('correct-answer-3').innerHTML = `الإجابة: ${q.correct} <span class="icon">${q.icon}</span>`;
+      document.getElementById('next-btn-3').style.display = "inline-block";
+      // Disable options
+      document.querySelectorAll('input[name="tfChoice"]').forEach(el => el.disabled = true);
+    }
+
+    function nextQuestion3() {
+      current3++;
+      if (current3 < tfStatements.length) {
+        showTFQuestion();
+      } else {
+        document.getElementById('quiz-section-3').innerHTML = `<div style='font-size:1.2rem'>Quiz Complete!</div>
+          <div class="result">Your score: ${score3} / ${tfStatements.length}</div>
+          <button onclick="returnToMenu()">⬅️ Back to Menu</button>`;
+      }
+    }
+
+    document.getElementById('answer-form-3').onsubmit = checkTFAnswer;
+    document.getElementById('next-btn-3').onclick = nextQuestion3;
+
+    function showSection(section) {
+      document.getElementById('menu-container').style.display = 'none';
+      document.getElementById('vocab-list').style.display = 'none';
+      document.getElementById('quiz-section').style.display = 'none';
+      document.getElementById('quiz-section-2').style.display = 'none';
+      document.getElementById('quiz-section-3').style.display = 'none';
+      document.getElementById(section).style.display = '';
+    }
+
+    function returnToMenu() {
+      document.getElementById('menu-container').style.display = '';
+      document.getElementById('vocab-list').style.display = 'none';
+      document.getElementById('quiz-section').style.display = 'none';
+      document.getElementById('quiz-section-2').style.display = 'none';
+      document.getElementById('quiz-section-3').style.display = 'none';
+    }
+
+    // Menu button events
+    document.getElementById('show-vocab-btn').onclick = function() {
+      showSection('vocab-list');
+    };
+    document.getElementById('start-quiz-btn').onclick = function() {
+      current = 0; score = 0;
+      showSection('quiz-section');
+      showQuestion();
+    };
+    document.getElementById('start-what-btn').onclick = function() {
+      current2 = 0; score2 = 0;
+      showSection('quiz-section-2');
+      showWhatQuestion();
+    };
+    document.getElementById('start-tf-btn').onclick = function() {
+      current3 = 0; score3 = 0;
+      showSection('quiz-section-3');
+      showTFQuestion();
+    };
+
+    // Start with menu only
+    returnToMenu();
+  </script>
+</body>
+</html>
