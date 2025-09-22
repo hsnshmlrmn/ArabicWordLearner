@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arabic Flashcards Quiz - Lesson 1</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; color: #222; display: flex; flex-direction: column; align-items: center; }
+    .quiz-container { background: #fff; padding: 2rem; border-radius: 10px; margin-top: 2rem; box-shadow: 0 4px 12px #0001; min-width: 320px; }
+    .input-area { margin: 1.5rem 0; }
+    .result { font-weight: bold; margin: 1rem 0; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; border-radius: 5px; border: none; background: #3c8dbc; color: #fff; cursor: pointer; }
+    button:disabled { background: #bbb; }
+    .score { margin: 1rem 0; font-size: 1.1rem; }
+    .next-btn { margin-left: 1rem; }
+    .answer-show { font-size: 1.2rem; margin: 0.8rem 0 0.3rem 0; }
+    .icon { font-size: 1.3em; vertical-align: middle; margin-left: 0.4em; }
+  </style>
+</head>
+<body>
+  <h1>Arabic Flashcards Quiz - Lesson 1</h1>
+  <div class="quiz-container">
+    <div id="question">
+      <div class="answer-show" id="arabic-word"></div>
+    </div>
+    <form id="answer-form" autocomplete="off">
+      <div class="input-area">
+        <input type="text" id="user-answer" placeholder="Type English here..." style="font-size:1.1rem; width: 80%;" autofocus>
+      </div>
+      <button type="submit">Check</button>
+      <button type="button" class="next-btn" id="next-btn" style="display:none;">Next</button>
+    </form>
+    <div class="result" id="result"></div>
+    <div class="answer-show" id="correct-answer"></div>
+    <div class="score" id="score"></div>
+  </div>
+  <script>
+    // Quiz data
+    const quiz = [
+      {arabic: "بَيْت", english: "house", icon: "🏠"},
+      {arabic: "قَلَم", english: "pen", icon: "🖊️"},
+      {arabic: "مَسْجِد", english: "masjid", icon: "🕌"},
+      {arabic: "مِفْتَاح", english: "key", icon: "🗝️"},
+      {arabic: "بَاب", english: "door", icon: "🚪"},
+      {arabic: "مَكْتَب", english: "desk", icon: "🪑"},
+      {arabic: "كِتَاب", english: "book", icon: "📖"},
+      {arabic: "سَرِير", english: "bed", icon: "🛏️"},
+      {arabic: "دَفْتَر", english: "notebook", icon: "📓"},
+      {arabic: "كُرْسِي", english: "chair", icon: "🪑"},
+      {arabic: "نَجْم", english: "star", icon: "⭐"},
+      {arabic: "قَمِيص", english: "shirt", icon: "👕"},
+    ];
+
+    // Shuffle quiz order
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    shuffle(quiz);
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      document.getElementById('user-answer').value = "";
+      document.getElementById('result').textContent = "";
+      document.getElementById('correct-answer').textContent = "";
+      document.getElementById('next-btn').style.display = "none";
+      const q = quiz[current];
+      document.getElementById('arabic-word').textContent = q.arabic;
+      document.getElementById('score').textContent = `Question ${current + 1} of ${quiz.length} | Score: ${score}`;
+      document.getElementById('user-answer').disabled = false;
+      document.getElementById('user-answer').focus();
+    }
+
+    function checkAnswer(e) {
+      e.preventDefault();
+      const userAns = document.getElementById('user-answer').value.trim().toLowerCase();
+      const q = quiz[current];
+      const correct = q.english.toLowerCase();
+      let resultText = "";
+      if (!userAns) {
+        resultText = "Please enter your answer!";
+        document.getElementById('result').textContent = resultText;
+        return;
+      } else if (userAns === correct) {
+        resultText = "✅ Correct!";
+        score++;
+      } else {
+        resultText = `❌ Incorrect!`;
+      }
+      document.getElementById('result').textContent = resultText;
+      document.getElementById('correct-answer').innerHTML = `Answer: ${q.english} <span class="icon">${q.icon}</span>`;
+      document.getElementById('next-btn').style.display = "inline-block";
+      document.getElementById('user-answer').disabled = true;
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        showQuestion();
+      } else {
+        document.getElementById('question').innerHTML = "<div style='font-size:1.2rem'>Quiz Complete!</div>";
+        document.getElementById('answer-form').style.display = "none";
+        document.getElementById('result').textContent = `Your score: ${score} / ${quiz.length}`;
+        document.getElementById('correct-answer').textContent = "";
+        document.getElementById('score').textContent = "";
+      }
+    }
+
+    document.getElementById('answer-form').onsubmit = checkAnswer;
+    document.getElementById('next-btn').onclick = nextQuestion;
+
+    showQuestion();
+  </script>
+</body>
+</html>
