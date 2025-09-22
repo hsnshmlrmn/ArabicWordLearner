@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    <link rel="manifest" href="manifest_lesson2.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker_lesson2.js');
+            });
+        }
+    </script>
+    
+    <meta charset="UTF-8">
+    <title>Lesson 2 Arabic Vocabulary Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .question { margin-bottom: 20px; }
+        .options button { display: block; margin: 5px 0; padding: 10px; width: 100%; max-width: 300px; }
+        #result { font-weight: bold; margin-top: 20px; }
+        @media (max-width: 600px) {
+            body { font-size: 16px; padding: 10px; }
+            .options button { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Lesson 2 Arabic Vocabulary Quiz</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+    <script>
+        const questions = [
+            { word: "Teacher", correct: "مدرس", options: ["مدرس", "طبيب", "ولد", "جمل"] },
+            { word: "Dog", correct: "كلب", options: ["كلب", "قط", "ديك", "تاجر"] },
+            { word: "Man", correct: "رجل", options: ["رجل", "طالب", "مدرس", "منديل"] },
+            { word: "Cat", correct: "قط", options: ["قط", "كلب", "حصان", "طبيب"] },
+            { word: "Doctor", correct: "طبيب", options: ["طبيب", "معلم", "ديك", "جمل"] },
+            { word: "Donkey", correct: "حمار", options: ["حمار", "رجل", "طالب", "تاجر"] },
+            { word: "Boy", correct: "ولد", options: ["ولد", "مدرس", "منديل", "حصان"] },
+            { word: "Horse", correct: "حصان", options: ["حصان", "قط", "كلب", "طبيب"] },
+            { word: "Student", correct: "طالب", options: ["طالب", "رجل", "ديك", "جمل"] },
+            { word: "Rooster", correct: "ديك", options: ["ديك", "ولد", "منديل", "تاجر"] },
+            { word: "Merchant", correct: "تاجر", options: ["تاجر", "مدرس", "قط", "حمار"] },
+            { word: "Camel", correct: "جمل", options: ["جمل", "طبيب", "رجل", "طالب"] },
+            { word: "Muadhin", correct: "مؤذن", options: ["مؤذن", "ديك", "مدرس", "منديل"] },
+            { word: "Handkerchief", correct: "منديل", options: ["منديل", "ولد", "حصان", "قط"] }
+        ];
+
+        let current = 0;
+        let score = 0;
+
+        function showQuestion() {
+            const q = questions[current];
+            const quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = `<div class='question'><strong>${current + 1}. What is the Arabic word for "${q.word}"?</strong></div>`;
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(opt);
+                optionsDiv.appendChild(btn);
+            });
+            quizDiv.appendChild(optionsDiv);
+        }
+
+        function checkAnswer(answer) {
+            const q = questions[current];
+            if (answer === q.correct) {
+                score++;
+                alert("Correct!");
+            } else {
+                alert(`Wrong! The correct answer is ${q.correct}`);
+            }
+            current++;
+            if (current < questions.length) {
+                showQuestion();
+            } else {
+                document.getElementById("quiz").innerHTML = "";
+                document.getElementById("result").textContent = `Quiz completed! Your score: ${score} out of ${questions.length}`;
+            }
+        }
+
+        showQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+    "name": "Arabic Vocabulary Quiz - Lesson 2",
+    "short_name": "Arabic Quiz L2",
+    "start_url": "lesson2_arabic_quiz_pwa.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": []
+}
