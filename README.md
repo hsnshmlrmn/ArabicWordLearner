@@ -28,7 +28,7 @@
 3. Go to **Settings > Pages**.
 4. Under **Source**, select `main` branch and `/root`.
 5. Save and access your app at:
-   `https://hsnshmlrmn.github.io/arabic-word-learner/`
+   `https://hsnshmlrmn.github.io/ArabicWordLearner/`
 
 ## 📱 Usage
 - Answer each question by selecting the correct Arabic word.
