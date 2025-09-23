@@ -1,0 +1,126 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  color: #222;
+  font-family: "Segoe UI", Arial, sans-serif;
+  min-height: 100vh;
+}
+.main-container {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 1.2em 0.5em 2em 0.5em;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.menu-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin: 2em 0;
+  width: 100%;
+}
+.menu-btns button {
+  width: 100%;
+  padding: 1em;
+  font-size: 1.2em;
+}
+button {
+  padding: 0.7em 1.5em;
+  margin: 0.5em 0;
+  font-size: 1em;
+  border-radius: 7px;
+  border: none;
+  background: #3c8dbc;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+button:active, button:focus {
+  background: #2a6a8c;
+}
+button:disabled {
+  background: #bbb;
+  cursor: default;
+}
+.vocab {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0 2em 0;
+  font-size: 1em;
+}
+.vocab th, .vocab td {
+  border: 1px solid #ddd;
+  padding: 0.5em 0.6em;
+  text-align: center;
+}
+.vocab th {
+  background: #f0f0f0;
+}
+@media (max-width: 600px) {
+  .main-container {
+    max-width: 99vw;
+    padding: 0.4em 0.2em 2em 0.2em;
+  }
+  h1, h2 {
+    font-size: 1.2em;
+    margin: 0.4em 0 0.8em 0;
+  }
+  .vocab th, .vocab td { font-size: 0.98em; }
+}
+.rtl { direction: rtl; }
+.question-area {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px #0001;
+  padding: 1em 1.2em;
+  margin-bottom: 1em;
+  width: 100%;
+  max-width: 99vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.q-arabic {
+  font-size: 1.4em;
+  margin: 0.6em 0 1em 0;
+}
+input[type="text"] {
+  width: 80%;
+  font-size: 1.1em;
+  padding: 0.5em;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  margin-bottom: 1em;
+}
+.quiz-actions {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 0.5em;
+}
+.feedback {
+  font-weight: bold;
+  margin-top: 0.5em;
+  min-height: 1.6em;
+}
+.answer-show {
+  font-size: 1.1em;
+  margin: 0.5em 0 0.1em 0;
+}
+.icon {
+  font-size: 1.2em;
+  vertical-align: middle;
+  margin-left: 0.2em;
+}
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 1.2em;
+  margin: 1.2em 0 0.7em 0;
+  font-size: 1.2em;
+}
+.radio-label { margin-right: 0.8em; margin-left: 0.8em; }
+.score { margin-top: 0.5em; }
